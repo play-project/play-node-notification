@@ -9,6 +9,7 @@ var express = require('express');
 var app = express();
 var count = 0;
 var port = process.env.PORT || 3000;
+var path = process.env.SUBCRIBER || '/subscriber'
 
 // JSON
 //app.use(express.bodyParser());
@@ -29,15 +30,15 @@ app.use (function(req, res, next) {
 
 
 app.get('/', function(req, res){
-  res.json({ requests : count} );
+  res.json({ requests : count, info : 'HTTP POST on ' + path} );
 });
 
-app.post('/subscriber', function(req, res) {
+app.post(path, function(req, res) {
 	console.log('Got a notification at', new Date().toGMTString());
 	count++;
 	console.log(req.body)
 });
 
 app.listen(port, function(err) {
-	console.log('Notification listener is waiting messages on http://localhost:' + port + "/");
+	console.log('Notification listener is waiting messages on http://localhost:' + port + path);
 });
